@@ -6,10 +6,15 @@ import { v7 } from 'uuid';
 import { HASH_ROUNDS } from 'src/apis/auth/constants/auth.constant';
 import { ProductEntity } from 'src/entities/product.entity';
 import { ProductLikeEntity } from 'src/entities/product-like.entity';
+import { ProductReviewEntity } from 'src/entities/product-review.entity';
 
 export type UserModel = Omit<
   UserEntity,
-  'comparePassword' | 'toPersistence' | 'products' | 'productLikes'
+  | 'comparePassword'
+  | 'toPersistence'
+  | 'products'
+  | 'productLikes'
+  | 'productReviews'
 >;
 
 @Entity('users')
@@ -57,6 +62,16 @@ export class UserEntity extends BaseEntity {
     onUpdate: 'CASCADE',
   })
   productLikes: ProductLikeEntity[];
+
+  @OneToMany(
+    () => ProductReviewEntity,
+    (productReviews) => productReviews.user,
+    {
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    },
+  )
+  productReviews: ProductReviewEntity[];
 
   static async create(
     createProps: Pick<
