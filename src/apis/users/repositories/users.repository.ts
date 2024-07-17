@@ -8,23 +8,23 @@ import { Repository } from 'typeorm';
 export class UsersRepository {
   constructor(
     @InjectRepository(UserEntity)
-    private readonly usersRepository: Repository<UserEntity>,
+    private readonly repository: Repository<UserEntity>,
   ) {}
 
   create(userEntity: UserEntity) {
-    return this.usersRepository.save(userEntity);
+    return this.repository.save(userEntity);
   }
 
   findOneById(id: string) {
-    return this.usersRepository.findOneBy({ id });
+    return this.repository.findOneBy({ id });
   }
 
   findOneByEmail(email: string) {
-    return this.usersRepository.findOneBy({ email });
+    return this.repository.findOneBy({ email });
   }
 
   findByEmailOrPhoneNumber(email: string, phoneNumber: string) {
-    return this.usersRepository.find({
+    return this.repository.find({
       where: [
         {
           email,

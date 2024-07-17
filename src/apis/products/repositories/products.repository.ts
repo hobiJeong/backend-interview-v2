@@ -8,37 +8,34 @@ import { Repository } from 'typeorm';
 export class ProductsRepository {
   constructor(
     @InjectRepository(ProductEntity)
-    private readonly productsRepository: Repository<ProductEntity>,
+    private readonly repository: Repository<ProductEntity>,
   ) {}
 
   create(productEntity: ProductEntity) {
     const productModel = productEntity.toPersistence();
 
-    return this.productsRepository.save(productModel);
+    return this.repository.save(productModel);
   }
 
   findOneById(id: string) {
-    return this.productsRepository.findOneBy({ id });
+    return this.repository.findOneBy({ id });
   }
 
   findAllByName(name: string) {
-    return this.productsRepository.find({ where: { name } });
+    return this.repository.find({ where: { name } });
   }
 
   findAllAndCount(findManyOptions: FindManyOptionsForPagination<ProductModel>) {
-    return this.productsRepository.findAndCount(findManyOptions);
+    return this.repository.findAndCount(findManyOptions);
   }
 
   update(productEntity: ProductEntity) {
     const productModel = productEntity.toPersistence();
 
-    return this.productsRepository.update(
-      { id: productModel.id },
-      productModel,
-    );
+    return this.repository.update({ id: productModel.id }, productModel);
   }
 
   delete(productEntity: ProductEntity) {
-    return this.productsRepository.delete({ id: productEntity.id });
+    return this.repository.delete({ id: productEntity.id });
   }
 }
