@@ -83,6 +83,8 @@ export class ProductEntity extends BaseEntity {
     productEntity.price = price;
     productEntity.size = size;
     productEntity.userId = userId;
+    productEntity.createdAt = new Date();
+    productEntity.updatedAt = new Date();
 
     return productEntity;
   }
