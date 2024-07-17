@@ -1,8 +1,16 @@
+import { ProductColor } from 'src/apis/products/constants/product.enum';
 import { BaseEntity } from 'src/entities/base.entity';
-import { Column, Entity } from 'typeorm';
+import { UserEntity } from 'src/entities/user.entity';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity('products')
 export class ProductEntity extends BaseEntity {
+  @Column('varchar', {
+    name: 'user_id',
+    comment: '상품을 생성한 유저 id',
+  })
+  userId: string;
+
   @Column('varchar', {
     length: 100,
     comment: '상품 이름',
@@ -30,9 +38,16 @@ export class ProductEntity extends BaseEntity {
   })
   size: string;
 
-  @Column('varchar', {
-    length: 20,
+  @Column('enum', {
+    enum: ProductColor,
     comment: '상품 색깔',
   })
-  color: string;
+  color: ProductColor;
+
+  @ManyToOne(() => UserEntity, (user) => user.products, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
+  user: UserEntity;
 }

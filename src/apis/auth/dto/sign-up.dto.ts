@@ -1,4 +1,4 @@
-import { IsEmail, IsPhoneNumber, Length, Matches } from 'class-validator';
+import { IsEmail, Length, Matches } from 'class-validator';
 import {
   phoneRegex,
   USER_NAME_LENGTH,
@@ -6,11 +6,16 @@ import {
 } from 'src/apis/users/constants/user.constant';
 import { UserEntity } from 'src/entities/user.entity';
 
-export class SignUpRequestBodyDto
+export class SignUpDto
   implements
     Omit<
       UserEntity,
-      'id' | 'comparePassword' | 'status' | 'createdAt' | 'updatedAt'
+      | 'id'
+      | 'comparePassword'
+      | 'status'
+      | 'createdAt'
+      | 'updatedAt'
+      | 'products'
     >
 {
   @Length(USER_NAME_LENGTH.MIN, USER_NAME_LENGTH.MAX)

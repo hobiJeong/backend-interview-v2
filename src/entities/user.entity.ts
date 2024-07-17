@@ -1,9 +1,10 @@
 import { UserStatus } from 'src/apis/users/constants/user.enum';
 import { BaseEntity } from 'src/entities/base.entity';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany } from 'typeorm';
 import bcrypt from 'bcrypt';
 import { v7 } from 'uuid';
 import { HASH_ROUNDS } from 'src/apis/auth/constants/auth.constant';
+import { ProductEntity } from 'src/entities/product.entity';
 
 @Entity('users')
 export class UserEntity extends BaseEntity {
@@ -38,6 +39,12 @@ export class UserEntity extends BaseEntity {
     comment: '유저 상태',
   })
   status: UserStatus;
+
+  @OneToMany(() => ProductEntity, (products) => products.user, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  products: ProductEntity[];
 
   static async create(
     name: string,

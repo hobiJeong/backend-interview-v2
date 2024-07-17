@@ -1,8 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { JWT_SECRET } from 'src/apis/auth/constants/auth.constant';
-import { SignInRequestBodyDto } from 'src/apis/auth/dto/sign-in-request-body.dto';
-import { SignUpRequestBodyDto } from 'src/apis/auth/dto/sign-up-request-body.dto';
+import { SignInDto } from 'src/apis/auth/dto/sign-in.dto';
+import { SignUpDto } from 'src/apis/auth/dto/sign-up.dto';
 import { Payload } from 'src/apis/auth/types/auth.type';
 import { UsersService } from 'src/apis/users/services/users.service';
 
@@ -13,14 +13,14 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signUp(signUpRequestBodyDto: SignUpRequestBodyDto) {
-    const newUser = await this.usersService.create(signUpRequestBodyDto);
+  async signUp(signUpDto: SignUpDto) {
+    const newUser = await this.usersService.create(signUpDto);
 
     return this.generateToken(newUser);
   }
 
-  async signIn(signInRequestBodyDto: SignInRequestBodyDto) {
-    const { email, password } = signInRequestBodyDto;
+  async signIn(signInDto: SignInDto) {
+    const { email, password } = signInDto;
 
     const existUser = await this.usersService.findOneByEmail(email);
 
