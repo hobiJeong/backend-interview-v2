@@ -6,12 +6,12 @@ import {
   PRODUCT_SIZE_LENGTH,
 } from 'src/apis/products/constants/product.constant';
 import { ProductColor } from 'src/apis/products/constants/product.enum';
-import { ProductEntity } from 'src/entities/product.entity';
+import type { ProductModel } from 'src/entities/product.entity';
 
 export class CreateProductDto
   implements
     Pick<
-      ProductEntity,
+      ProductModel,
       'name' | 'description' | 'brand' | 'price' | 'size' | 'color'
     >
 {

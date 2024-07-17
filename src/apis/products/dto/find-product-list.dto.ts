@@ -9,11 +9,11 @@ import {
 } from 'src/apis/products/constants/product.enum';
 import { SortOrder } from 'src/common/constants/sort-order.enum';
 import { PageDto } from 'src/common/dto/page.dto';
-import { ProductEntity } from 'src/entities/product.entity';
+import type { ProductModel } from 'src/entities/product.entity';
 
 export class FindProductListDto
   extends PageDto
-  implements Partial<Pick<ProductEntity, 'brand' | 'name' | 'color' | 'id'>>
+  implements Partial<Pick<ProductModel, 'brand' | 'name' | 'color' | 'id'>>
 {
   @IsOptional()
   @IsUUID(7)
