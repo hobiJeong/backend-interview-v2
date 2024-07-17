@@ -5,6 +5,12 @@ import bcrypt from 'bcrypt';
 import { v7 } from 'uuid';
 import { HASH_ROUNDS } from 'src/apis/auth/constants/auth.constant';
 import { ProductEntity } from 'src/entities/product.entity';
+import { ProductLikeEntity } from 'src/entities/product-like.entity';
+
+export type UserModel = Omit<
+  UserEntity,
+  'comparePassword' | 'toPersistence' | 'products' | 'productLikes'
+>;
 
 @Entity('users')
 export class UserEntity extends BaseEntity {
@@ -46,6 +52,12 @@ export class UserEntity extends BaseEntity {
   })
   products: ProductEntity[];
 
+  @OneToMany(() => ProductLikeEntity, (productLikes) => productLikes.user, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  productLikes: ProductLikeEntity[];
+
   static async create(
     createProps: Pick<
       UserEntity,
@@ -70,5 +82,18 @@ export class UserEntity extends BaseEntity {
 
   comparePassword(plainPassword: string) {
     return bcrypt.compare(plainPassword, this.password);
+  }
+
+  toPersistence(): UserModel {
+    return {
+      id: this.id,
+      name: this.name,
+      email: this.email,
+      phoneNumber: this.phoneNumber,
+      password: this.password,
+      status: this.status,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+    };
   }
 }

@@ -1,12 +1,13 @@
 import { ProductColor } from 'src/apis/products/constants/product.enum';
 import { BaseEntity } from 'src/entities/base.entity';
+import { ProductLikeEntity } from 'src/entities/product-like.entity';
 import { UserEntity } from 'src/entities/user.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { v7 } from 'uuid';
 
 export type ProductModel = Omit<
   ProductEntity,
-  'updateProductInfo' | 'toPersistence' | 'user'
+  'updateProductInfo' | 'toPersistence' | 'user' | 'productLikes'
 >;
 
 @Entity('products')
@@ -56,6 +57,12 @@ export class ProductEntity extends BaseEntity {
   })
   @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
   user: UserEntity;
+
+  @OneToMany(() => ProductLikeEntity, (productLikes) => productLikes.product, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  productLikes: ProductLikeEntity[];
 
   static create(
     createProps: Pick<
