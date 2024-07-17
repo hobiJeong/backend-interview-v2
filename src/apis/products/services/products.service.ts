@@ -46,6 +46,16 @@ export class ProductsService {
     return existProduct;
   }
 
+  async isExistsOrNotFound(id: string) {
+    const isExist = await this.productsRepository.isExistsBy(id);
+
+    if (!isExist) {
+      throw new NotFoundException("The product doesn't exist.");
+    }
+
+    return isExist;
+  }
+
   findAllAndCount(findProductListDto: FindProductListDto) {
     const { page, pageSize, orderField, sortOrder, id, name, brand, color } =
       findProductListDto;

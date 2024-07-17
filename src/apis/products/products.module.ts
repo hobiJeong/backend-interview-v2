@@ -9,5 +9,6 @@ import { ProductsRepository } from 'src/apis/products/repositories/products.repo
   imports: [TypeOrmModule.forFeature([ProductEntity])],
   controllers: [ProductsController],
   providers: [ProductsService, ProductsRepository],
+  exports: [ProductsService],
 })
 export class ProductsModule {}

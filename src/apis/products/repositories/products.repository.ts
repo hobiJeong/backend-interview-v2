@@ -29,6 +29,10 @@ export class ProductsRepository {
     return this.repository.findAndCount(findManyOptions);
   }
 
+  isExistsBy(id: string) {
+    return this.repository.existsBy({ id });
+  }
+
   update(productEntity: ProductEntity) {
     const productModel = productEntity.toPersistence();
 
