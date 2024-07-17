@@ -72,6 +72,9 @@ export class ProductsService {
       order: {
         [orderField]: sortOrder,
       },
+      relations: {
+        productLikes: true,
+      },
     });
   }
 
