@@ -1,0 +1,17 @@
+# 어떤 정보(실행할 서비스)를 정의 할 것인지
+services:
+  mysql:
+    image: mysql:8.0
+    restart: always
+    volumes:
+      - ./db/mysql/data:/var/lib/mysql
+      - ./db/mysql/config:/etc/mysql/conf.d
+      - ./db/mysql/init:/docker-entrypoint-initdb.d
+    ports:
+      - '3307:3307'
+    expose:
+      - 3307
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: assignment
+      MYSQL_TCP_PORT: 3307

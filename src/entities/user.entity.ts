@@ -1,0 +1,65 @@
+import { UserStatus } from 'src/apis/users/constants/user.enum';
+import { BaseEntity } from 'src/entities/base.entity';
+import { Column, Entity } from 'typeorm';
+import bcrypt from 'bcrypt';
+import { v7 } from 'uuid';
+import { HASH_ROUNDS } from 'src/apis/auth/constants/auth.constant';
+
+@Entity('users')
+export class UserEntity extends BaseEntity {
+  @Column('varchar', {
+    length: 20,
+    comment: '유저 이름',
+  })
+  name: string;
+
+  @Column('varchar', {
+    comment: '유저 핸드폰 번호',
+    name: 'phone_number',
+    length: 15,
+    unique: true,
+  })
+  phoneNumber: string;
+
+  @Column('varchar', {
+    comment: '유저 이메일',
+    unique: true,
+  })
+  email: string;
+
+  @Column('varchar', {
+    comment: '유저 패스워드',
+  })
+  password: string;
+
+  @Column('enum', {
+    enum: UserStatus,
+    default: UserStatus.ACTIVE,
+    comment: '유저 상태',
+  })
+  status: UserStatus;
+
+  static async create(
+    name: string,
+    phoneNumber: string,
+    email: string,
+    password: string,
+  ): Promise<UserEntity> {
+    const userEntity = new UserEntity();
+
+    userEntity.id = v7();
+    userEntity.name = name;
+    userEntity.phoneNumber = phoneNumber;
+    userEntity.email = email;
+    userEntity.password = await bcrypt.hash(password, HASH_ROUNDS);
+    userEntity.status = UserStatus.ACTIVE;
+    userEntity.createdAt = new Date();
+    userEntity.updatedAt = new Date();
+
+    return userEntity;
+  }
+
+  comparePassword(plainPassword: string) {
+    return bcrypt.compare(plainPassword, this.password);
+  }
+}
