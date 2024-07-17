@@ -14,7 +14,10 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+  app.useGlobalInterceptors(
+    new ClassSerializerInterceptor(app.get(Reflector)),
+    app.get<PaginationInterceptor>(PaginationInterceptor),
+  );
 
   await app.listen(3000);
 }
