@@ -1,6 +1,6 @@
 import { UserStatus } from 'src/apis/users/constants/user.enum';
 import { BaseEntity } from 'src/entities/base.entity';
-import { Column, Entity, JoinColumn, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import bcrypt from 'bcrypt';
 import { v7 } from 'uuid';
 import { HASH_ROUNDS } from 'src/apis/auth/constants/auth.constant';
@@ -47,11 +47,13 @@ export class UserEntity extends BaseEntity {
   products: ProductEntity[];
 
   static async create(
-    name: string,
-    phoneNumber: string,
-    email: string,
-    password: string,
+    createProps: Pick<
+      UserEntity,
+      'name' | 'phoneNumber' | 'email' | 'password'
+    >,
   ): Promise<UserEntity> {
+    const { name, phoneNumber, email, password } = createProps;
+
     const userEntity = new UserEntity();
 
     userEntity.id = v7();

@@ -8,3 +8,11 @@ export enum ProductColor {
   Brown = 'brown',
   Yellow = 'yellow',
 }
+
+export enum ProductOrderField {
+  Id = 'id',
+  Price = 'price',
+  CreatedAt = 'createdAt',
+  Name = 'name',
+  Brand = 'brand',
+}

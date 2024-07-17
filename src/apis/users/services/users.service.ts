@@ -8,12 +8,12 @@ export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
   async create(userCreateDto: UserCreateDto) {
-    const { name, phoneNumber, email, password } = userCreateDto;
+    const { email, password } = userCreateDto;
 
     await this.checkUserDuplicated(email, password);
 
     return this.usersRepository.create(
-      await UserEntity.create(name, phoneNumber, email, password),
+      await UserEntity.create({ ...userCreateDto }),
     );
   }
 

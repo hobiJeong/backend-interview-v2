@@ -2,6 +2,12 @@ import { ProductColor } from 'src/apis/products/constants/product.enum';
 import { BaseEntity } from 'src/entities/base.entity';
 import { UserEntity } from 'src/entities/user.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { v7 } from 'uuid';
+
+export type ProductModel = Omit<
+  ProductEntity,
+  'updateProductInfo' | 'toPersistence' | 'user'
+>;
 
 @Entity('products')
 export class ProductEntity extends BaseEntity {
@@ -50,4 +56,73 @@ export class ProductEntity extends BaseEntity {
   })
   @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
   user: UserEntity;
+
+  static create(
+    createProps: Pick<
+      ProductEntity,
+      'name' | 'description' | 'brand' | 'color' | 'price' | 'size' | 'userId'
+    >,
+  ) {
+    const { name, description, brand, color, price, size, userId } =
+      createProps;
+
+    const productEntity = new ProductEntity();
+
+    productEntity.id = v7();
+    productEntity.name = name;
+    productEntity.description = description;
+    productEntity.brand = brand;
+    productEntity.color = color;
+    productEntity.price = price;
+    productEntity.size = size;
+    productEntity.userId = userId;
+
+    return productEntity;
+  }
+
+  updateProductInfo(
+    updateProps: Partial<
+      Pick<
+        ProductEntity,
+        'name' | 'description' | 'brand' | 'color' | 'price' | 'size'
+      >
+    >,
+  ) {
+    const { name, description, brand, color, price, size } = updateProps;
+
+    if (name) {
+      this.name = name;
+    }
+    if (description) {
+      this.description = description;
+    }
+    if (brand) {
+      this.brand = brand;
+    }
+    if (color) {
+      this.color = color;
+    }
+    if (price) {
+      this.price = price;
+    }
+    if (size) {
+      this.size = size;
+    }
+    this.updatedAt = new Date();
+  }
+
+  toPersistence(): ProductModel {
+    return {
+      id: this.id,
+      userId: this.userId,
+      name: this.name,
+      description: this.description,
+      brand: this.brand,
+      color: this.color,
+      size: this.size,
+      price: this.price,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+    };
+  }
 }
