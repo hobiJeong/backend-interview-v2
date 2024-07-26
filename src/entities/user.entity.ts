@@ -1,7 +1,7 @@
 import { UserStatus } from 'src/apis/users/constants/user.enum';
 import { BaseEntity } from 'src/entities/base.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
-import bcrypt from 'bcrypt';
+import bcryptjs from 'bcryptjs';
 import { v7 } from 'uuid';
 import { HASH_ROUNDS } from 'src/apis/auth/constants/auth.constant';
 import { ProductEntity } from 'src/entities/product.entity';
@@ -87,7 +87,7 @@ export class UserEntity extends BaseEntity {
     userEntity.name = name;
     userEntity.phoneNumber = phoneNumber;
     userEntity.email = email;
-    userEntity.password = await bcrypt.hash(password, HASH_ROUNDS);
+    userEntity.password = await bcryptjs.hash(password, HASH_ROUNDS);
     userEntity.status = UserStatus.ACTIVE;
     userEntity.createdAt = new Date();
     userEntity.updatedAt = new Date();
@@ -96,7 +96,7 @@ export class UserEntity extends BaseEntity {
   }
 
   comparePassword(plainPassword: string) {
-    return bcrypt.compare(plainPassword, this.password);
+    return bcryptjs.compare(plainPassword, this.password);
   }
 
   toPersistence(): UserModel {

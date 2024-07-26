@@ -1,0 +1,29 @@
+service: backend-interview-serverless
+
+useDotenv: true
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: ap-northeast-2
+  environment:
+    hello: ${env:hello}
+
+package:
+  exclude:
+    - node_modules/**
+    - venv/**
+
+functions:
+  main:
+    handler: dist/serverless.handler
+    events:
+      - http:
+          method: ANY
+          path: /
+      - http:
+          method: ANY
+          path: '{proxy+}'

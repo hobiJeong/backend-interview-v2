@@ -13,6 +13,9 @@ import { Like } from 'typeorm';
 import { isNil } from 'src/common/common';
 import { PatchUpdateProductDto } from 'src/apis/products/dto/patch-update-product.dto';
 import { isNotEmptyObject } from 'class-validator';
+import { config } from 'dotenv';
+
+config();
 
 @Injectable()
 export class ProductsService {
@@ -59,6 +62,8 @@ export class ProductsService {
   findAllAndCount(findProductListDto: FindProductListDto) {
     const { page, pageSize, orderField, sortOrder, id, name, brand, color } =
       findProductListDto;
+
+    console.log(process.env.hello);
 
     return this.productsRepository.findAllAndCount({
       where: {
